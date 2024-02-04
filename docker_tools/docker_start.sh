@@ -22,7 +22,6 @@ function usage() {
     echo " -f: force update docker daemon.json for setting insecure registry"
     echo " -g: use nvidia gpu, need install nvidia-docker2"
     echo " -p <port num>: use set port to container ssh"
-    exit 1
 }
 
 while getopts ":i:n:p:fhg" opt
