@@ -7,6 +7,7 @@ name=""
 update_flag=false
 USE_GPU=""
 CONTAINER_PORT="--network host"
+HTTPS_PROT=""
 
 echo_error(){
     echo -e "\e[91m[ERROR]$@\e[0m"
@@ -24,7 +25,7 @@ function usage() {
     echo " -p <port num>: use set port to container ssh"
 }
 
-while getopts ":i:n:p:fhg" opt
+while getopts ":i:n:p:v:fhg" opt
 do
     case "${opt}" in
     n)
@@ -40,6 +41,11 @@ do
     p)
         CONTAINER_PORT="-p $OPTARG:22"
         echo "Port rmap Host:Container = $OPTARG:22"
+        ;;
+    v)
+        HTTPS_PROT="-e https_proxy=$OPTARG \
+                    -e http_proxy=$OPTARG "
+        echo "Use https proxy: $OPTARG"
         ;;
     i)
         IMG=$OPTARG
@@ -100,6 +106,7 @@ function main(){
         -v $ROOT_DIR:/workspace \
         -w /workspace \
 	    $CONTAINER_PORT \
+        $HTTPS_PROT \
         --add-host ${LOCAL_HOST}:127.0.0.1 \
         --add-host ${DOCKER_HOST}:127.0.0.1 \
         --hostname $DOCKER_HOST \
