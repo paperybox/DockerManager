@@ -1,13 +1,19 @@
 #! /bin/bash
 
 Pwd=$( readlink -f "$( dirname $0 )" )
-source $Pwd/ysu.env
+source $Pwd/../ysu.env
+
+pkg-config openvino --modversion 
+if [ $? -eq 0 ]; then
+    echo_info "openvino $(pkg-config openvino --modversion) has been installed, skiped install"
+    exit 0
+fi
 
 openvino_src_root=$thirdparty_root_dir/openvino
 openvino_install_root=$install_root/openvino
 
 cd $thirdparty_root_dir
-checkCmdWarn git clone -b 2022.3.1 https://gitlab.com/paperybox/openvino.git
+checkCmdWarn git clone -j $cpus -b 2022.3.1 https://gitlab.com/paperybox/openvino.git
 
 cd $openvino_src_root
 chmod +x scripts/submodule_update_with_gitee.sh
@@ -66,3 +72,14 @@ export LD_LIBRARY_PATH=$openvino_src_root/bin/intel64/Release:\$LD_LIBRARY_PATH
 source ~/.bashrc
 
 checkCmdError pip install openvino==2022.3.1
+
+mkdir -p /usr/local/lib/pkgconfig
+cp $openvino_src_root/build/share/openvino.pc /usr/local/lib/pkgconfig
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+
+pkg-config openvino --modversion
+if [ $? -ne 0 ]; then
+    echo_error "================================= MODULE OPENVINO-"$(pkg-config openvino --modversion)" INIT FAILED ================================="
+else
+    echo_info "================================= MODULE OPENVINO-"$(pkg-config openvino --modversion)" INIT SUCCESSFUL ================================="
+fi

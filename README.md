@@ -18,7 +18,9 @@ sudo service docker restart
 
 
 拉起环境，并初始化安装一些必要的工具。
-依次调用`docker_tools/install_config.d/`中所有的自定义*.sh脚本。由于网络原因，有概率失败，可以docker_into.sh进入容器后，手动`sudo /workspace/docker_tools/install_config.sh`继续安装。
+依次调用`docker_tools/install_config.d/`中所有的自定义*.sh脚本。
+
+由于网络原因，有概率失败，可以docker_into.sh进入容器后，手动`sudo /workspace/docker_tools/install_config.sh`继续安装。
 ```bash
 ./docker_tools/docker_start.sh #拉起容器，提供一些可自定义的参数， 详见 -h
 ./docker_tools/docker_into.sh #进入拉起的容器
@@ -28,6 +30,9 @@ sudo service docker restart
 ```bash
 sudo ./docker_tools/install_config.sh #直接初始化自定义环境,通过软链接保持路径与使用docker一致。
 ```
+
+### Tips:
+***无论何种初始化方式，下载 和 编译过程非常耗时 ，实测100M家庭宽带+8代i5笔记本 整个流程需要约2小时。服务器集群则多取决于网速，编译时间较短，共计耗时22m28.440s。在多机部署时，建议在足够强悍的机器上进行首次部署，后续机器将3rdparty_root_dir完整cp，可有效减少等待时间。***
 
 ### 开发环境
 为了保证广泛兼容性，建议使用 CMake 工具链。

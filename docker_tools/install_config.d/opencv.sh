@@ -1,7 +1,13 @@
 #! /bin/bash
 
 Pwd=$( readlink -f "$( dirname $0 )" )
-source $Pwd/ysu.env
+source $Pwd/../ysu.env
+
+pkg-config opencv --modversion 
+if [ $? -eq 0 ]; then
+    echo_info "opencv $(pkg-config opencv --modversion) has been installed, skiped install "
+    exit 0
+fi
 
 network()
 {
@@ -19,37 +25,24 @@ network()
 checkCmdError network
 
 echo_info "================================= INIT MODULE OPENCV-3.4.9 ================================="
-Codename=$(cat /etc/os-release | grep VERSION_CODENAME | awk -F'=' '{print $2}')
-sourceweb='http://mirrors.aliyun.com'
-checkCmdError echo "
-deb-src $sourceweb/ubuntu/ $Codename main restricted universe multiverse
-deb-src $sourceweb/ubuntu/ $Codename-security main restricted universe multiverse
-deb-src $sourceweb/ubuntu/ $Codename-updates main restricted universe multiverse
-deb-src $sourceweb/ubuntu/ $Codename-proposed main restricted universe multiverse
-deb-src $sourceweb/ubuntu/ $Codename-backports main restricted universe multiverse
-" > /etc/apt/sources.list.d/opencv-depency.list
 
-checkCmdError apt update
 checkCmdError apt-get install -y openssh-client ssh vim make cmake gcc g++ curl git python3 git-lfs libgtk-3-dev libgtk2.0-dev pkg-config build-essential libavcodec-dev libavformat-dev libswscale-dev wget ca-certificates python3-dev python3-numpy python-dev python-numpy libpython3-dev libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff5-dev libdc1394-22-dev libavcodec-dev libavformat-dev libswscale-dev libv4l-dev liblapacke-dev libopenexr-dev libxvidcore-dev libx264-dev libatlas-base-dev gfortran libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev libavresample-dev libgphoto2-dev libopenblas-dev
 
-
-
 #定义安装路径
-
 install_dir="$install_root/opencv-3.4.9"
 src_root=$thirdparty_root_dir
 mkdir -p $src_root && cd $src_root
 
 opencv_src_dir="$src_root/opencv"
-checkCmdWarn git clone -b 3.4.9 https://gitlab.com/immersaview/public/remotes/opencv.git
+checkCmdWarn git clone -j $cpus -b 3.4.9 https://gitlab.com/immersaview/public/remotes/opencv.git
 
 
 opencv_contribut_dir="$src_root/opencv_contrib"
-checkCmdWarn git clone -b master https://gitlab.com/gawainsciencer/opencv_contrib.git
+checkCmdWarn git clone -j $cpus -b master https://gitlab.com/gawainsciencer/opencv_contrib.git
 
 
 ippicv_src_dir="$src_root/ippicv"
-checkCmdWarn git clone -b tag_build_for_opencv_3.4.9 https://gitlab.com/paperybox/ippicv.git
+checkCmdWarn git clone -j $cpus -b tag_build_for_opencv_3.4.9 https://gitlab.com/paperybox/ippicv.git
 
 cd $ippicv_src_dir && git lfs pull
 sed -i 's!https://raw.githubusercontent.com/opencv/opencv_3rdparty/${IPPICV_COMMIT}/ippicv/!/workspace/3rdparty/opencv_src/ippicv!g' $opencv_src_dir/3rdparty/ippicv/ippicv.cmake
