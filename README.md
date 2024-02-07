@@ -2,7 +2,7 @@
 YSU-Eagle 统一视觉开发环境，基于Ubuntu20.04开发验证，仅用于学习交流。
 
 ## 使用
-将`docker_tools`目录放在工作目录下并初始化环境。
+将本项目文件夹命名为`docker_manager`，并放在工作目录下并初始化环境。
 
 ### 初始化方法1：(推荐用于个人开发)
 使用docker统一管理。
@@ -18,17 +18,17 @@ sudo service docker restart
 
 
 拉起环境，并初始化安装一些必要的工具。
-依次调用`docker_tools/install_config.d/`中所有的自定义*.sh脚本。
+依次调用`docker_manager/install_config.d/`中所有的自定义*.sh脚本。
 
-由于网络原因，有概率失败，可以docker_into.sh进入容器后，手动`sudo /workspace/docker_tools/install_config.sh`继续安装。
+由于网络原因，有概率失败，可以docker_into.sh进入容器后，手动`sudo /workspace/docker_manager/install_config.sh`继续安装。
 ```bash
-./docker_tools/docker_start.sh #拉起容器，提供一些可自定义的参数， 详见 -h
-./docker_tools/docker_into.sh #进入拉起的容器
+./docker_manager/docker_start.sh #拉起容器，提供一些可自定义的参数， 详见 -h
+./docker_manager/docker_into.sh #进入拉起的容器
 ```
 
 ### 初始化方法2:（推荐用于实车部署）
 ```bash
-sudo ./docker_tools/install_config.sh #直接初始化自定义环境,通过软链接保持路径与使用docker一致。
+sudo ./docker_manager/install_config.sh #直接初始化自定义环境,通过软链接保持路径与使用docker一致。
 ```
 
 ### Tips:
