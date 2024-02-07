@@ -9,6 +9,8 @@ if [ $? -eq 0 ]; then
     exit 0
 fi
 
+echo_info "================================= INIT MODULE OPENVINO-2022.3.1 ================================="
+
 openvino_src_root=$thirdparty_root_dir/openvino
 openvino_install_root=$install_root/openvino
 
