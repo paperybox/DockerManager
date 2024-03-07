@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 ROOT_DIR=$( readlink -f $(dirname $0)/../ )
 echo "workspace: $ROOT_DIR"
-IMG=ubuntu:20.04
-DEFAULT_NAME="ysu_${USER}"
+IMG=nvcr.io/nvidia/tensorrt:23.12-py3
+DEFAULT_NAME="docker_${USER}"
 name=""
 update_flag=false
 USE_GPU=""
 CONTAINER_PORT="--network host"
+HTTPS_PROT=""
 
 echo_error(){
     echo -e "\e[91m[ERROR]$@\e[0m"
@@ -22,10 +23,9 @@ function usage() {
     echo " -f: force update docker daemon.json for setting insecure registry"
     echo " -g: use nvidia gpu, need install nvidia-docker2"
     echo " -p <port num>: use set port to container ssh"
-    exit 1
 }
 
-while getopts ":i:n:p:fhg" opt
+while getopts ":i:n:p:v:fhg" opt
 do
     case "${opt}" in
     n)
@@ -41,6 +41,11 @@ do
     p)
         CONTAINER_PORT="-p $OPTARG:22"
         echo "Port rmap Host:Container = $OPTARG:22"
+        ;;
+    v)
+        HTTPS_PROT="-e https_proxy=$OPTARG \
+                    -e http_proxy=$OPTARG "
+        echo "Use https proxy: $OPTARG"
         ;;
     i)
         IMG=$OPTARG
@@ -85,8 +90,8 @@ function main(){
         --name $CONTAINER_DEV \
         -e NVIDIA_DRIVER_CAPABILITIES=all \
         -e DISPLAY=$display \
-        -e DOCKER_USER=ysu_$USER \
-        -e USER=ysu_$USER \
+        -e DOCKER_USER=docker_$USER \
+        -e USER=docker_$USER \
         -e DOCKER_USER_ID=$USER_ID \
         -e DOCKER_GRP="$GRP" \
         -e DOCKER_GRP_ID=$GRP_ID \
@@ -101,6 +106,7 @@ function main(){
         -v $ROOT_DIR:/workspace \
         -w /workspace \
 	    $CONTAINER_PORT \
+        $HTTPS_PROT \
         --add-host ${LOCAL_HOST}:127.0.0.1 \
         --add-host ${DOCKER_HOST}:127.0.0.1 \
         --hostname $DOCKER_HOST \
@@ -115,7 +121,7 @@ function main(){
         exit 1
     fi
     if [ "${USER}" != "root"  ];then
-        docker  exec $CONTAINER_DEV bash -c '/workspace/docker_tools/docker_adduser.sh'
+        docker  exec $CONTAINER_DEV bash -c '/workspace/docker_manager/docker_adduser.sh'
         if [ $? -ne 0 ];then
             echo_error "init container env failed"
             exit 1

@@ -1,8 +1,8 @@
-# YsuRmEnv
-YSU-Eagle 统一视觉开发环境，基于Ubuntu20.04开发验证，仅用于学习交流。
+# Docker Manager
+基于Ubuntu20.04开发验证，仅用于学习交流。
 
 ## 使用
-将`docker_tools`目录放在工作目录下并初始化环境。
+将本项目文件夹命名为`docker_manager`，并放在工作目录下并初始化环境。
 
 ### 初始化方法1：(推荐用于个人开发)
 使用docker统一管理。
@@ -18,16 +18,21 @@ sudo service docker restart
 
 
 拉起环境，并初始化安装一些必要的工具。
-依次调用`docker_tools/install_config.d/`中所有的自定义*.sh脚本。由于网络原因，有概率失败，可以docker_into.sh进入容器后，手动`sudo /workspace/docker_tools/install_config.sh`继续安装。
+依次调用`docker_manager/install_config.d/`中所有的自定义*.sh脚本。
+
+由于网络原因，有概率失败，可以docker_into.sh进入容器后，手动`sudo /workspace/docker_manager/install_config.sh`继续安装。
 ```bash
-./docker_tools/docker_start.sh #拉起容器，提供一些可自定义的参数， 详见 -h
-./docker_tools/docker_into.sh #进入拉起的容器
+./docker_manager/docker_start.sh #拉起容器，提供一些可自定义的参数， 详见 -h
+./docker_manager/docker_into.sh #进入拉起的容器
 ```
 
 ### 初始化方法2:（推荐用于实车部署）
 ```bash
-sudo ./docker_tools/install_config.sh #直接初始化自定义环境,通过软链接保持路径与使用docker一致。
+sudo ./docker_manager/install_config.sh #直接初始化自定义环境,通过软链接保持路径与使用docker一致。
 ```
+
+### Tips:
+***无论何种初始化方式，下载 和 编译过程非常耗时 ，实测100M家庭宽带+8代i5笔记本 整个流程需要约2小时。在多机部署时，建议在足够强悍的机器上进行首次部署，后续机器将3rdparty_root_dir完整cp，可有效减少等待时间。***
 
 ### 开发环境
 为了保证广泛兼容性，建议使用 CMake 工具链。
@@ -59,7 +64,7 @@ sudo ./docker_tools/install_config.sh #直接初始化自定义环境,通过软�
 1) -n <Name> | 进入指定名称的容器。
 
 #### docker_adduser.sh
-1) 初始化容器内基本配置，容器内当前默认用户密码/root密码：ysu
+1) 初始化容器内基本配置，容器内当前默认用户密码/root密码：123
 
 #### install_config.sh && install_config.d/
 1) 自定义环境，便利调用install_config.d中的sh脚本。

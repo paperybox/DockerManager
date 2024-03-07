@@ -26,14 +26,14 @@ do
     esac
 done
 
-DEFUALT_NAME="ysu_$USER"
+DEFUALT_NAME="docker_$USER"
 CONTAINER_DEV=${DEFUALT_NAME}${name}
 
 echo "login container: $CONTAINER_DEV"
 
 xhost +local:root 1>/dev/null 2>&1
 docker exec \
-    -u ysu_$USER \
+    -u docker_$USER \
     -it ${CONTAINER_DEV} \
     /bin/bash
 xhost -local:root 1>/dev/null 2>&1
