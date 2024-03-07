@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 ROOT_DIR=$( readlink -f $(dirname $0)/../ )
 echo "workspace: $ROOT_DIR"
-IMG=ubuntu:20.04
-DEFAULT_NAME="ysu_${USER}"
+IMG=nvcr.io/nvidia/tensorrt:23.12-py3
+DEFAULT_NAME="docker_${USER}"
 name=""
 update_flag=false
 USE_GPU=""
@@ -90,8 +90,8 @@ function main(){
         --name $CONTAINER_DEV \
         -e NVIDIA_DRIVER_CAPABILITIES=all \
         -e DISPLAY=$display \
-        -e DOCKER_USER=ysu_$USER \
-        -e USER=ysu_$USER \
+        -e DOCKER_USER=docker_$USER \
+        -e USER=docker_$USER \
         -e DOCKER_USER_ID=$USER_ID \
         -e DOCKER_GRP="$GRP" \
         -e DOCKER_GRP_ID=$GRP_ID \
@@ -121,7 +121,7 @@ function main(){
         exit 1
     fi
     if [ "${USER}" != "root"  ];then
-        docker  exec $CONTAINER_DEV bash -c '/workspace/docker_tools/docker_adduser.sh'
+        docker  exec $CONTAINER_DEV bash -c '/workspace/docker_manager/docker_adduser.sh'
         if [ $? -ne 0 ];then
             echo_error "init container env failed"
             exit 1

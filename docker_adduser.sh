@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 DEBIAN_FRONTEND=noninteractive 
 
-echo "root:ysu" | chpasswd
+echo "root:123" | chpasswd
 addgroup --gid "$DOCKER_GRP_ID" "$DOCKER_GRP" --force-badname
 adduser --disabled-password --force-badname --gecos '' "$DOCKER_USER" --uid "$DOCKER_USER_ID" --gid "$DOCKER_GRP_ID" 
-echo "$DOCKER_USER:ysu" | chpasswd
+echo "$DOCKER_USER:123" | chpasswd
 
 
 Pwd=$( readlink -f "$( dirname $0 )" )
-source $Pwd/ysu.env
+source $Pwd/docker.env
 
 # install base tools
 

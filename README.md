@@ -1,5 +1,5 @@
-# YsuRmEnv
-YSU-Eagle 统一视觉开发环境，基于Ubuntu20.04开发验证，仅用于学习交流。
+# Docker Manager
+基于Ubuntu20.04开发验证，仅用于学习交流。
 
 ## 使用
 将本项目文件夹命名为`docker_manager`，并放在工作目录下并初始化环境。
@@ -64,7 +64,7 @@ sudo ./docker_manager/install_config.sh #直接初始化自定义环境,通过�
 1) -n <Name> | 进入指定名称的容器。
 
 #### docker_adduser.sh
-1) 初始化容器内基本配置，容器内当前默认用户密码/root密码：ysu
+1) 初始化容器内基本配置，容器内当前默认用户密码/root密码：123
 
 #### install_config.sh && install_config.d/
 1) 自定义环境，便利调用install_config.d中的sh脚本。

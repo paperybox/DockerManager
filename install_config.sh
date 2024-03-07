@@ -1,6 +1,6 @@
 #! /bin/bash
 Pwd=$( readlink -f "$( dirname $0 )" )
-source $Pwd/ysu.env
+source $Pwd/docker.env
 
 
 RootDir=$( readlink -f $( dirname $0 )/../ )
